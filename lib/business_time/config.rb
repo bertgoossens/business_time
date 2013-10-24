@@ -21,6 +21,18 @@ module BusinessTime
 
       # You can set this yourself, either by the load method below, or
       # by saying
+      #   BusinessTime::Config.beginning_of_break = "12:00 am"
+      # someplace in the initializers of your application.
+      attr_accessor :beginning_of_break  
+
+      # You can set this yourself, either by the load method below, or
+      # by saying
+      #   BusinessTime::Config.end_of_break = "01:00 pm"
+      # someplace in the initializers of your application.
+      attr_accessor :end_of_break
+
+      # You can set this yourself, either by the load method below, or
+      # by saying
       #   BusinessTime::Config.work_week = [:sun, :mon, :tue, :wed, :thu]
       # someplace in the initializers of your application.
       attr_accessor :work_week
@@ -82,10 +94,12 @@ module BusinessTime
 
     def self.reset
       self.holidays = []
-      self.beginning_of_workday = "9:00 am"
+      self.beginning_of_workday = "8:00 am"
       self.end_of_workday = "5:00 pm"
       self.work_week = %w[mon tue wed thu fri]
       self.work_hours = {}
+      self.beginning_of_break = "12:00 pm"
+      self.end_of_break = "13:00 pm"
       @weekdays = nil
     end
 

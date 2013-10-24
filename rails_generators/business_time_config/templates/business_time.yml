@@ -1,6 +1,8 @@
 business_time:
-  beginning_of_workday: 9:00 am
+  beginning_of_workday: 8:00 am
   end_of_workday: 5:00 pm
+  beginning_of_break: 12:00 am
+  end_of_break: 01:00 pm
   holidays:
     - Jan 01, 2010
     - July 4th, 2010

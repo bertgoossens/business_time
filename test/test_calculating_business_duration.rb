@@ -35,8 +35,8 @@ class TestCalculatingBusinessDuration < Test::Unit::TestCase
     friday = Time.parse("December 24, 2010 15:00")
     monday = Time.parse("December 27, 2010 11:00")
     BusinessTime::Config.work_hours = {
-      :mon=>["9:00","17:00"],
-      :fri=>["9:00","17:00"],
+      :mon=>["8:00","17:00"],
+      :fri=>["8:00","17:00"],
       :sat=>["10:00","15:00"]
     }
     assert_equal 9.hours, friday.business_time_until(monday)

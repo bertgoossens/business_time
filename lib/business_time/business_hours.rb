@@ -24,6 +24,10 @@ module BusinessTime
           after_time = after_time + off_hours
         end
 
+        if Time.during_break?(after_time)
+          after_time = after_time + 1.hour
+        end
+
         # Ignore weekends and holidays
         while !Time.workday?(after_time)
           after_time = after_time + 1.day
@@ -42,6 +46,10 @@ module BusinessTime
         # Ignore hours before opening and after closing
         if (before_time < Time.beginning_of_workday(before_time))
           before_time = before_time - off_hours
+        end
+
+        if Time.during_break?(before_time)
+          before_time = before_time - 1.hour
         end
 
         # Ignore weekends and holidays

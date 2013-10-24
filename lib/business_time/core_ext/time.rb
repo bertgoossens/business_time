@@ -20,6 +20,23 @@ class Time
       change_time(day,beginning_of_workday.hour,beginning_of_workday.min,beginning_of_workday.sec)
     end
 
+    # Gives the time at the end of the break
+    def end_of_break(day)
+      end_of_break = Time.parse(BusinessTime::Config.end_of_break)
+      change_time(day, end_of_break.hour, end_of_break.min, end_of_break.sec)
+    end
+
+    # Gives the time at the begin of the break
+    def beginning_of_break(day)
+      beginning_of_break = Time.parse(BusinessTime::Config.beginning_of_break)
+      change_time(day, beginning_of_break.hour, beginning_of_break.min, beginning_of_break.sec)
+    end
+
+    #true if there is a break defined
+    def break?
+      BusinessTime::Config.beginning_of_break && BusinessTime::Config.end_of_break
+    end
+
     # True if this time is on a workday (between 00:00:00 and 23:59:59), even if
     # this time falls outside of normal business hours.
     def workday?(day)
@@ -40,6 +57,10 @@ class Time
       time.to_i > end_of_workday(time).to_i
     end
 
+    def during_break?(time)
+      beginning_of_break(time).to_i < time.to_i && time.to_i < end_of_break(time).to_i && Time.workday?(time)
+    end
+
     # Rolls forward to the next beginning_of_workday
     # when the time is outside of business hours
     def roll_forward(time)
@@ -48,6 +69,8 @@ class Time
         next_business_time = Time.beginning_of_workday(time)
       elsif Time.after_business_hours?(time) || Time.end_of_workday(time) == time
         next_business_time = Time.beginning_of_workday(time + 1.day)
+      elsif Time.during_break?(time)
+        next_business_time = time + 1.hour
       else
         next_business_time = time.clone
       end
@@ -66,6 +89,8 @@ class Time
         prev_business_time = Time.end_of_workday(time) - 1.day
       elsif Time.after_business_hours?(time)
         prev_business_time = Time.end_of_workday(time)
+      elsif Time.during_break?(time)
+        prev_business_time = time - 1.hour
       else
         prev_business_time = time.clone
       end
@@ -113,6 +138,11 @@ class Time
     # If same date, then calculate difference straight forward
     if time_a.to_date == time_b.to_date
       result = time_b - time_a
+      # Check if date is before and after noon
+
+      if (time_b > Time.end_of_break(time_b) && time_a < Time.beginning_of_break(time_a))  || (time_a > Time.end_of_break(time_a) && time_b < Time.beginning_of_break(time_b)) 
+        result =  result - 1.hour 
+      end
       return result *= direction
     end
 
@@ -137,6 +167,7 @@ class Time
       else
         result += end_of_workday - time_c
         time_c = Time::roll_forward(end_of_workday)
+        result =  time_c < Time.beginning_of_break(time_c) && Time.break? && (time_c.to_date != time_b.to_date || time_b > Time.beginning_of_break(time_b) && time_c != Time::beginning_of_workday(time_c)) ? result - 1.hour : result
       end
       result += 1 if end_of_workday.to_s =~ /23:59:59/
     end

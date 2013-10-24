@@ -3,7 +3,7 @@ require 'helper'
 class TestConfig < Test::Unit::TestCase
 
   should "keep track of the start of the day" do
-    assert_equal "9:00 am", BusinessTime::Config.beginning_of_workday
+    assert_equal "8:00 am", BusinessTime::Config.beginning_of_workday
     BusinessTime::Config.beginning_of_workday = "8:30 am"
     assert_equal "8:30 am", BusinessTime::Config.beginning_of_workday
   end
@@ -38,15 +38,15 @@ class TestConfig < Test::Unit::TestCase
   should "keep track of the start of the day using work_hours" do
     assert_equal({},BusinessTime::Config.work_hours)
     BusinessTime::Config.work_hours = {
-      :mon=>["9:00","17:00"],
-      :tue=>["9:00","17:00"],
-      :thu=>["9:00","17:00"],
-      :fri=>["9:00","17:00"]
+      :mon=>["8:00","17:00"],
+      :tue=>["8:00","17:00"],
+      :thu=>["8:00","17:00"],
+      :fri=>["8:00","17:00"]
     }
-    assert_equal({:mon=>["9:00","17:00"],
-      :tue=>["9:00","17:00"],
-      :thu=>["9:00","17:00"],
-      :fri=>["9:00","17:00"]
+    assert_equal({:mon=>["8:00","17:00"],
+      :tue=>["8:00","17:00"],
+      :thu=>["8:00","17:00"],
+      :fri=>["8:00","17:00"]
     }, BusinessTime::Config.work_hours)
     assert_equal([1,2,4,5], BusinessTime::Config.weekdays.sort)
   end
@@ -88,7 +88,7 @@ class TestConfig < Test::Unit::TestCase
     YAML
     config_file = StringIO.new(yaml.gsub!(/^    /, ''))
     BusinessTime::Config.load(config_file)
-    assert_equal "9:00 am", BusinessTime::Config.beginning_of_workday
+    assert_equal "8:00 am", BusinessTime::Config.beginning_of_workday
     assert_equal "5:00 pm", BusinessTime::Config.end_of_workday
     assert_equal %w[mon tue wed thu fri], BusinessTime::Config.work_week
     assert_equal [], BusinessTime::Config.holidays

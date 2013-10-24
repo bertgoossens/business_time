@@ -34,7 +34,7 @@ class TestTimeWithZoneExtensions < Test::Unit::TestCase
   
     should "know the beginning of the day for an instance" do
       first = Time.zone.parse("August 17th, 2010, 11:50 am")
-      expecting = Time.zone.parse("August 17th, 2010, 9:00 am")
+      expecting = Time.zone.parse("August 17th, 2010, 8:00 am")
       assert_equal expecting, Time.beginning_of_workday(first)
     end
   
@@ -78,7 +78,7 @@ class TestTimeWithZoneExtensions < Test::Unit::TestCase
   
     should "know the beginning of the day for an instance" do
       first = Time.zone.parse("August 17th, 2010, 11:50 am")
-      expecting = Time.zone.parse("August 17th, 2010, 9:00 am")
+      expecting = Time.zone.parse("August 17th, 2010, 8:00 am")
       assert_equal expecting, Time.beginning_of_workday(first)
     end
   
