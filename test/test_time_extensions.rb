@@ -57,6 +57,12 @@ class TestTimeExtensions < Test::Unit::TestCase
       assert_equal time_b.business_time_until(time_a), -200.minutes
     end
 
+    should "calclulate business time between different dates" do        
+        start_date = Time.utc(2013, 10, 25, 8, 0, 0)
+        end_date = Time.utc(2013, 10, 28, 12, 0 ,0)
+        assert_equal start_date.business_time_until(end_date), 12.hours
+    end
+
     should "calculate business time only within business hours even if second endpoint is out of business time" do
       time_a = Time.parse('2012-02-01 10:00')
       time_b = Time.parse("2012-02-01 " + BusinessTime::Config.end_of_workday) + 24.minutes

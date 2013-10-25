@@ -167,7 +167,7 @@ class Time
       else
         result += end_of_workday - time_c
         time_c = Time::roll_forward(end_of_workday)
-        result =  time_c < Time.beginning_of_break(time_c) && Time.break? && (time_c.to_date != time_b.to_date || time_b > Time.beginning_of_break(time_b) && time_c != Time::beginning_of_workday(time_c)) ? result - 1.hour : result
+        result =  time_c < Time.beginning_of_break(time_c) && Time.break? && (time_a.to_date != time_b.to_date || time_b > Time.beginning_of_break(time_b) && time_b != Time::beginning_of_workday(time_b)) ? result - 1.hour : result
       end
       result += 1 if end_of_workday.to_s =~ /23:59:59/
     end
