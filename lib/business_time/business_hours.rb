@@ -17,6 +17,7 @@ module BusinessTime
       after_time = Time.roll_forward(time)
       # Step through the hours, skipping over non-business hours
       @hours.times do
+        prev_time = after_time
         after_time = after_time + 1.hour
 
         # Ignore hours before opening and after closing
@@ -24,7 +25,7 @@ module BusinessTime
           after_time = after_time + off_hours
         end
 
-        if Time.during_break?(after_time)
+        if Time.during_break?(after_time) || (Time.beginning_of_break(prev_time).to_i == prev_time.to_i && Time.end_of_break(after_time).to_i == after_time.to_i)
           after_time = after_time + 1.hour
         end
 

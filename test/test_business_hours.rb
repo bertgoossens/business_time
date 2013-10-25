@@ -11,6 +11,13 @@ class TestBusinessHours < Test::Unit::TestCase
       assert_equal expected, later
     end
 
+    should "move to the end of the day if add 8 hour" do
+      first = Time.parse("Aug 4 2010, 08:00 am")
+      later = 8.business_hours.after(first)
+      expected = Time.parse("Aug 4 2010, 17:00 pm")
+      assert_equal expected, later
+    end
+
     should "move to yesterday if we subtract 8 business hours" do
       first = Time.parse("Aug 4 2010, 9:35 am")
       later = 8.business_hours.before(first)
